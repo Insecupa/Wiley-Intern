@@ -9,7 +9,6 @@ class Subject{
 	int marksScored;
 	
 	public Subject(int subId, int teacherId, String teacherName, int marksScored) {
-		super();
 		this.subId = subId;
 		this.teacherId = teacherId;
 		this.teacherName = teacherName;
