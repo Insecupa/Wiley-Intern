@@ -19,6 +19,12 @@ public class EmployeeApp {
 		
 		//Problem 1
 		Employee.sortEmployees(employee);
+		
+		
+		//Sorted Employee Printing
+		for(Employee emplo : employee) {
+			System.out.println(emplo.getEmpName() + "  " + emplo.getEmpGrossSalary());
+		}
 				
 		//Problem 1
 		String dept = "IT";
