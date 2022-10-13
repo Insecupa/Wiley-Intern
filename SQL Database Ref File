@@ -1,0 +1,63 @@
+create table Customer (
+	customerId int primary key auto_increment,
+    customerName varchar(20) not null,
+    typeOfCustomer varchar(20) not null,
+    areaCode int not null
+);
+
+create table bill(
+	customerId int not null ,
+	billId int primary key auto_increment,
+    mon varchar(3) not null,
+    numberOfUnits int not null,
+    totalBill decimal(10, 2) not null,
+    FOREIGN KEY (customerId) REFERENCES
+    Customer(customerId) ON DELETE CASCADE
+);
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getAllCustomers`()
+BEGIN
+	select * from Customer;
+END;
+
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getDetailsByMonth`(
+	IN mon varchar(3)
+)
+BEGIN
+	SELECT b.billId, c.customerId, c.customerName, b.numberOfUnits, b.totalBill
+    FROM Bill b JOIN Customer c on c.customerId = b.customerId
+    and b.mon = mon;
+END
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getBillForCustomerMonth`(
+	IN customerId int,
+    IN mon varchar(3)
+)
+BEGIN
+	SELECT b.billId, c.customerId, c.customerName, b.numberOfUnits, b.totalBill
+    FROM Bill b JOIN Customer c on b.customerId = c.customerId
+    and c.customerId = customerId
+    and b.mon = mon;
+END
+
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `totalBillForMonth`(
+	IN mon varchar(3),
+    OUT total decimal(10, 2)
+)
+BEGIN
+	SELECT SUM(totalBill) into total
+    from bill 
+    where bill.mon = mon;
+END
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `printByMonthDesc`(
+	IN mon varchar(3)
+)
+BEGIN
+	SELECT b.billId, c.customerId, c.customerName, b.numberOfUnits, b.totalBill
+    FROM Bill b JOIN Customer c on c.customerId = b.customerId
+    and b.mon = mon
+    order by b.totalBill DESC;
+END
